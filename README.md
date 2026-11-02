@@ -1,91 +1,77 @@
-# Backend Airbnb — NestJS / Prisma / MySQL
+# Airbnb Backend
 
-Đã có code và kiểm thử MySQL thật **36/36 thao tác nghiệp vụ**; không tính hai health. Đã có Postman Collection v2.1, environment mẫu và hướng dẫn demo; đã deploy Render Free; chưa quay video demo. Không yêu cầu tokenCybersoft.
+Dự án cuối khóa Node.js xây dựng REST API cho ứng dụng đặt phòng Airbnb.
+Hệ thống hỗ trợ xác thực, phân quyền, quản lý người dùng, vị trí, phòng,
+đặt phòng và bình luận, kèm tài liệu API tương tác bằng Swagger UI.
 
-Hướng dẫn từ source sạch: [docs/setup.md](docs/setup.md).
+**Swagger public:** [Mở tài liệu API](https://nodejs56-capstone-airbnb.onrender.com/api/docs)
 
-## Chạy trên máy hiện tại
+## Công nghệ
 
-Node.js24, npm11, MySQL80 phiên bản8.0.44 tại127.0.0.1:3306. Hai tài khoản/database dev/test riêng đã cấu hình trong .env (gitignore), không dùng root chạy ứng dụng. ADMIN/user demo local nằm ở .env.demo.local; chỉ mở xem tại máy, không đưa file/password lên chat/Git. Signup luôn USER; ADMIN phải signin bằng account seed.
+- **Backend:** NestJS, TypeScript.
+- **Dữ liệu:** Prisma ORM, MySQL.
+- **Xác thực:** JWT, phân quyền USER/ADMIN.
+- **Tài liệu API:** Swagger / OpenAPI.
+- **Lưu trữ ảnh:** Cloudinary; hỗ trợ lưu local khi phát triển.
+- **Triển khai:** Render cho backend, Aiven cho MySQL.
 
-```powershell
-npm ci
-npm run prisma:generate
-npm run build
-npm run db:verify
-npm start
-```
+## Chức năng chính
 
-Swagger http://localhost:3069/api/docs; JSON /api/docs-json. Health /api/health; database /api/health/database truy vấn thật (200 hoặc503). Ctrl+C đóng Prisma pool. Môi trường mới: xem docs/mysql-local.md, .env.example và SQL preflight trước ghi schema có sẵn. JWT_SECRET ngẫu nhiên>=32byte; không ghi đè secret cũ. db:verify dùng migrate deploy không shadow, seed hai lần kiểm tra accounts/password/counts không đổi, không reset dữ liệu.
+Tổng cộng **36 thao tác nghiệp vụ**, chia thành 6 nhóm API:
 
-Compose giữ nguyên tại cổng3308 như lựa chọn riêng. MySQL80 hiện tại không cần Docker; hai backup runtime Docker không bị sửa.
+| Nhóm API | Chức năng | Số thao tác |
+| --- | --- | ---: |
+| Auth | Đăng ký, đăng nhập | 2 |
+| Người dùng | Quản lý, tìm kiếm, phân trang và upload avatar | 8 |
+| Vị trí | Quản lý, tìm kiếm, phân trang và upload ảnh vị trí | 7 |
+| Phòng | Quản lý, tìm kiếm, lọc theo vị trí và upload ảnh phòng | 8 |
+| Đặt phòng | Tạo, xem, cập nhật, xóa và tra cứu theo người dùng; kiểm tra lịch trùng | 6 |
+| Bình luận | Thêm, sửa, xóa và xem bình luận theo phòng | 5 |
 
-## Thử luồng Swagger
+## Chạy local
 
-1. POST /api/auth/signin, nhập data.token vào Authorize (không thêm Bearer). API cũng nhận Authorization: Bearer; hai header khác nhau trả401. JWT HS256 hạn1giờ; quyền đọc lại DB, không refresh token.
-2. GET /api/phong-thue công khai, chọn id/sức chứa.
-3. POST /api/dat-phong với maPhong, maNguoiDung, soLuongKhach, ngayDen/ngayDi có timezone (ví dụ2040-01-10T07:00:00+07:00). USER chỉ tạo cho mình; ADMIN được chọn user tồn tại. ID do DB sinh.
-4. GET /api/dat-phong/lay-theo-nguoi-dung/{MaNguoiDung} hoặc /api/dat-phong/{id}; chính chủ/ADMIN. GET toàn bộ đơn chỉ ADMIN.
-5. POST /api/binh-luan: maPhong, maNguoiBinhLuan bằng JWT user id, noiDung, saoBinhLuan1..5. Ngày do server xác định. Không yêu cầu đã ở hoặc giới hạn một bình luận. PUT/DELETE chỉ tác giả/ADMIN, không chuyển tác giả.
+### Yêu cầu
 
-## Hợp đồng
+- Node.js **24.x**, npm **11**.
+- MySQL **8.x** đang chạy; database riêng và tài khoản có quyền áp dụng migration.
 
-Success {status,statusCode,data}; lỗi {status,statusCode,message}. POST tạo/upload201, signin và GET/PUT/DELETE200. Lỗi dự kiến400/401/403/404/409, upload413/415, rate limit signin429. Không trả stack, connection string hoặc password hash; tác giả bình luận công khai chỉ id/name/avatar.
+### Cài đặt và cấu hình
 
-DTO whitelist, từ chối trường thừa; không implicit boolean conversion. PUT nhận partial trường hợp lệ; body id nếu có phải khớp path, không đổi PK. Phân trang pageIndex/pageSize/keyword mặc định1/10, max pageSize100, order id tăng. User PUT không đổi password; USER không gửi role. ADMIN chỉ được hạ quyền/xóa ADMIN khi còn ADMIN khác; ADMIN cuối trả409, khóa trong transaction và có test cạnh tranh. Birthday DATE, YYYY-MM-DD thật từ1900 đến hôm nay. Password tạo user12..72ký tự và<=72byte UTF-8. Giá integer VND không âm, khach>0; phòng ngủ/giường/tắm>=0; banLa và banUi riêng.
+1. Mở terminal tại thư mục chứa `package.json`.
+2. Nếu chưa có `.env`, sao chép file mẫu:
 
-## Lịch đặt và quyền
+   ```sh
+   cp .env.example .env
+   ```
 
-Ngày đặt là ISO-8601 có timezone, tối đa3 chữ số mili giây, chuẩn hóa UTC DATETIME(3). ngayDen<ngayDi; soLuongKhach nguyên dương<=sức chứa. Không cấm quá khứ. Khoảng nửa mở [ngayDen,ngayDi): hai đơn liền kề được phép. Overlap khi existing.ngayDen<requested.ngayDi và existing.ngayDi>requested.ngayDen, trả409. PUT kiểm tra lại quyền/ngày/phòng/user/sức chứa/lịch, loại chính đơn khỏi overlap. DELETE xóa vật lý, chưa thêm thanh toán/hoàn tiền/trạng thái hủy.
+3. Tạo database MySQL riêng và cập nhật `DATABASE_URL` trong `.env`
+   theo host, port, database và tài khoản của bạn; URL-encode ký tự đặc biệt trong mật khẩu.
+4. Đặt `JWT_SECRET` ngẫu nhiên tối thiểu 32 byte; giữ `IMAGE_STORAGE=local`
+   để chạy local mà không cần cấu hình Cloudinary. Không đưa `.env` lên Git.
+5. Cài dependency, generate Prisma Client, áp dụng migration và khởi động:
 
-Đặt phòng luôn yêu cầu JWT; toàn bộ danh sách ADMIN, còn detail/update/delete/theo-user chính chủ hoặc ADMIN. USER không được chuyển đơn cho user khác. Bình luận POST tác giả phải khớp JWT kể cả ADMIN; PUT không chuyển tác giả. noiDung trim1..10000, sao nguyên1..5. ngayBinhLuan request nhận chuỗi để tương thích nhưng bỏ qua; server tạo ngày, PUT giữ nguyên ngày cũ. Không yêu cầu đã ở/giới hạn một bình luận.
+   ```sh
+   npm ci
+   npm run prisma:generate
+   npm run db:migrate
+   npm run build
+   npm start
+   ```
 
-## Transaction và khóa
+Swagger local: [http://localhost:3069/api/docs](http://localhost:3069/api/docs)
+(với `PORT=3069` mặc định).
 
-Xem src/modules-api/stays/booking.service.ts. READ COMMITTED; create khóa hàng Phong bằng SELECT ... FOR UPDATE trước đọc overlap và insert. PUT/DELETE khóa DatPhong trước, đọc lại đơn và quyền; khóa phòng cũ/mới theo ID tăng dần, kiểm tra lịch sau khóa. READ COMMITTED nhìn thấy commit của holder trước khi chờ khóa xong. SQL raw tham số hóa; tối đa3 lần thử khi P2034 hoặc MySQL1213/1205, hết lượt trả409.
+## Sử dụng Swagger
 
-Mọi ghi lịch ứng dụng phải đi qua service này. Schema/index không tự chống overlap nếu ghi SQL/seed bên ngoài. Không khẳng định mọi tải production đã được kiểm chứng. FK RESTRICT giữ lịch sử liên quan; xóa bị chặn trả409.
+1. Gọi `POST /api/auth/signin` bằng tài khoản đã đăng ký.
+2. Sao chép `data.token` từ response.
+3. Bấm **Authorize**, dán token nguyên bản, không thêm tiền tố `Bearer`.
+4. Gọi API được bảo vệ theo quyền của tài khoản; đăng ký mới luôn nhận quyền USER.
 
-## Upload và source
+## Tài liệu
 
-ImageStorage dùng chung avatar/phòng/vị trí: Multer memory2MiB; giải mã JPEG/PNG/WebP không động<=16triệu pixel, chuyển WebP UUID. Multipart formFile, upload phòng thêm query maPhong, vị trí maViTri. Kiểm tra quyền/record trước lưu; commit DB trước dọn ảnh cũ; lỗi DB dọn file mới, chỉ xóa file app quản lý. UPLOAD_DIR mặc định uploads/avatars, prefix /uploads/avatars/ giữ tương thích. PUBLIC_URL đúng domain. Local upload cần persistent volume; Render Free dùng IMAGE_STORAGE=cloudinary với TLS Aiven và không dùng disk tạm để lưu ảnh. Upload không đưa Git.
+- [Cài đặt đầy đủ và khởi tạo dữ liệu local](docs/setup.md)
+- [Postman Collection và hướng dẫn sử dụng](docs/postman/README.md)
+- [Triển khai Render, Aiven và Cloudinary](docs/deploy-free.md)
 
-common chứa config/guard/filter/interceptor/helper; modules-system/prisma quản lý DB/shutdown; modules-api/users/catalog/stays chứa nghiệp vụ. Kế thừa tổ chức Nest gateway và Multer Express từ source học tập. Không thêm Redis/microservices/ORM khác. Giữ schema/migration gốc, RSA retrieval chỉ bật loopback.
-
-## Kiểm thử và tài liệu
-
-```powershell
-npm run build
-npm run test:mysql
-npm run test:auth-users
-npm run test:smoke
-npm run test:db-target
-```
-
-MySQL thật: hồi quy HTTP/MySQL 36 thao tác cùng bảo vệ ADMIN cuối, phủ36 thao tác, gồm hồi quy25 trước và11 mới. Ba vòng6 request cùng phòng/lịch: mỗi vòng1 thành công5 xung đột, countDB đúng1. Tạo-vs-PUT:1 thành công1 xung đột; phòng độc lập2 thành công. Bao gồm overlap/adjacency/timezone/ownership/FK/upload, dọn ảnh mới khi DB thất bại. Test chỉ dùng airbnb_capstone_test với opt-in; xác minh đích/account trước ghi, cleanup chỉ ID của lượt, không drop/truncate/reset/schema khác.
-
-Mock riêng: test:auth-users47 kiểm tra, không coi là MySQL. Smoke kiểm tra Swagger38 thao tác (36nghiệp vụ+2health), CORS và DB503. Guard test2ca chặn đích không an toàn.
-
-Chi tiết36endpoint: docs/api-scope.md. Swagger UI tham khảo truy cập được nhưng JSON không đọc được bằng web tool trong lượt này; dùng docs/airbnb-reference.swagger.json đã lưu.
-
-## Chuẩn bị nộp còn lại
-
-Postman collection và hướng dẫn demo đã có trong docs/. Các bước nộp bài còn lại: quản lý task theo yêu cầu lớp và quay video YouTube. Vận hành cần theo dõi hạn mức Free, backup DB/ảnh và quản lý secret. Đủ36endpoint chưa đồng nghĩa hoàn thành các phần nộp bài này. Swagger public: https://nodejs56-capstone-airbnb.onrender.com/api/docs .
-
-
-## Bàn giao và các kiểm tra mới
-
-- Bảo vệ ADMIN cuối: transaction READ COMMITTED khóa các hàng ADMIN theo ID tăng dần trước count và update/delete; đọc lại quyền actor. Tối đa 3 thử deadlock, không nâng quyền công khai. Test chỉ thay đổi fixtures trong database test; không đụng tài khoản phát triển.
-- db:verify xác minh loopback/schema, không so sánh client port với @@port: mapping host3308 → server3306 hợp lệ. Test độc lập bao phủ port mapping; chưa chạy Docker thật.
-- `npm run format` và `npm run format:check`: Prettier cho source/script/config, bỏ qua generated client/lockfile/snapshot. `npx tsc --noEmit --noUnusedLocals --noUnusedParameters` kiểm tra import/code thừa.
-- `npm run check:postman`: đối chiếu36method/path, JSON và script syntax; chưa chạy collection end-to-end. Collection/Environment trong docs/postman, import và đọc docs/postman/README.md. Không tự chạy trên database phát triển.
-- Dockerfile/.dockerignore và hướng dẫn docs/containers.md: migration target giữ CLI, production non-root, không seed; persistent volume ảnh và hostname container khác Windows. Đã build hai target và chạy container smoke non-root; chưa migrate MySQL thật từ container hoặc kiểm chứng Compose port mapping.
-- Kịch bản quay/demo: docs/demo.md. Repository: https://github.com/longvo-31241027904/NODEJS56-CAPSTONE-AIRBNB . Swagger public: https://nodejs56-capstone-airbnb.onrender.com/api/docs ; chưa có video YouTube.
-
-Kiểm tra đóng gói thực tế: `npm run check:containers` đạt (sau build hai image local review); migrate CLI/schema engine chạy offline, runtime health/Swagger/DB503 đạt. Đã triển khai public bằng native Node Render; chưa thử migration live từ container. Audit production0; audit toàn bộ còn9 cảnh báo trong dev dependencies, không dùng audit fix --force đổi major.
-
-## Deploy Render Free / Aiven / Cloudinary
-
-Xem [docs/deploy-free.md](docs/deploy-free.md) và render.yaml. Đã thử kết nối TLS, migration và bootstrap ADMIN trên database Aiven riêng; đã kiểm thử Cloudinary Free thật (upload/CDN/replace/rollback); Render public đã trả200 health/database/OpenAPI; đã đạt23 kiểm tra HTTPS gồm auth/quyền/booking/comment/upload. Cấu hình cloud trong .env.cloud.local, credential ADMIN trong .env.cloud-admin.local (đều Git ignore); giữ nguyên .env local. `test:cloud-prep` là kiểm tra mock/config, không thay thế kiểm chứng cloud thật.
-
-Public: [Swagger](https://nodejs56-capstone-airbnb.onrender.com/api/docs), [health](https://nodejs56-capstone-airbnb.onrender.com/api/health), [database health](https://nodejs56-capstone-airbnb.onrender.com/api/health/database). Render Free có cold start. ADMIN cloud xem .env.cloud-admin.local tại máy, không dùng credential local seed.
+> Render Free có cold start: request đầu tiên sau thời gian không hoạt động có thể phản hồi chậm.
