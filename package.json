@@ -18,10 +18,13 @@
     "db:verify": "node scripts/verify-local-db.cjs",
     "test:mysql": "node scripts/test-mysql.cjs",
     "test:db-target": "node --test scripts/database-target.test.cjs scripts/local-db-identity.test.cjs",
-    "format": "prettier --write \"src/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.{cjs,mjs,ps1}\" \"*.{ts,json,yml}\" --ignore-unknown",
-    "format:check": "prettier --check \"src/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.{cjs,mjs,ps1}\" \"*.{ts,json,yml}\" --ignore-unknown",
+    "format": "prettier --write \"src/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.{cjs,mjs,ps1,ts}\" \"*.{ts,json,yml}\" --ignore-unknown",
+    "format:check": "prettier --check \"src/**/*.ts\" \"prisma/**/*.ts\" \"scripts/**/*.{cjs,mjs,ps1,ts}\" \"*.{ts,json,yml}\" --ignore-unknown",
     "check:postman": "node scripts/check-postman.cjs",
-    "check:containers": "node scripts/check-containers.cjs"
+    "check:containers": "node scripts/check-containers.cjs",
+    "cloud:prepare": "tsx scripts/cloud-prepare.ts",
+    "cloud:start": "npm run cloud:prepare && node dist/main.js",
+    "test:cloud-prep": "node scripts/test-cloud-preparation.cjs"
   },
   "dependencies": {
     "@nestjs/common": "11.2.8",
@@ -33,6 +36,7 @@
     "bcrypt": "6.0.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.3",
+    "cloudinary": "2.10.0",
     "dotenv": "17.2.3",
     "express-rate-limit": "8.7.2",
     "jsonwebtoken": "9.0.3",

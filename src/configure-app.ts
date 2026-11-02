@@ -7,6 +7,7 @@ import { ResponseSuccessInterceptor } from './common/interceptors/response.inter
 import { NestExpressApplication } from '@nestjs/platform-express';
 import rateLimit from 'express-rate-limit';
 export function configureApp(app: NestExpressApplication) {
+  if (environment.trustProxyHops) app.set('trust proxy', environment.trustProxyHops);
   app.use(
     '/api/auth/signin',
     rateLimit({

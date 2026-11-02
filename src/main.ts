@@ -7,7 +7,7 @@ import { environment } from './common/config/environment';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   configureApp(app);
-  await app.listen(environment.port);
+  await app.listen(environment.port, '0.0.0.0');
 }
 bootstrap().catch(() => {
   console.error('Application startup failed; check environment and port availability.');

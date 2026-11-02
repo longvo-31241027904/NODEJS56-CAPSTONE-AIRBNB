@@ -32,3 +32,6 @@ __pycache__/
 *.pdf
 .npm/
 .eslintcache
+*.pem
+*.key
+certs/

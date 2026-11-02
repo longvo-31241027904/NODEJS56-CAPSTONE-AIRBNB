@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: nodejs56-airbnb
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm ci --include=dev && npm run prisma:generate && npm run build
+    startCommand: npm run cloud:start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 24.14.0
+      - key: NODE_ENV
+        value: production
+      - key: IMAGE_STORAGE
+        value: cloudinary
+      - key: DB_TLS_REQUIRED
+        value: "true"
+      - key: CLOUD_ALLOW_WRITE
+        value: "true"
+      - key: CLOUD_DB_OWNERSHIP_CONFIRMED
+        sync: false
+      - key: CLOUD_DB_EXPECTED_HOST
+        sync: false
+      - key: CLOUD_DB_EXPECTED_DATABASE
+        value: airbnb_capstone_deploy
+      - key: CLOUD_BOOTSTRAP_ADMIN
+        value: "false"
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_CA_CERT_BASE64
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_ASSET_SIGNING_KEY
+        generateValue: true
+      - key: PUBLIC_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

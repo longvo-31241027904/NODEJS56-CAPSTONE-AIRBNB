@@ -1,3 +1,4 @@
+import { uploadCloud, removeCloud } from './cloud-assets';
 import { BadRequestException, Injectable, UnsupportedMediaTypeException } from '@nestjs/common';
 import sharp from 'sharp';
 import { randomUUID } from 'node:crypto';
@@ -26,6 +27,21 @@ export class ImageStorage {
       throw new UnsupportedMediaTypeException(
         'Only valid non-animated JPEG, PNG or WebP images are supported',
       );
+    }
+    if (environment.imageStorage === 'cloudinary') {
+      const url = await uploadCloud(image);
+      let result;
+      try {
+        result = await update(url);
+      } catch (error) {
+        await removeCloud(url).catch(() => console.error('Cloud image rollback cleanup failed'));
+        throw error;
+      }
+      if (result.oldUrl)
+        await removeCloud(result.oldUrl).catch(() =>
+          console.error('Old cloud image cleanup failed'),
+        );
+      return result.data;
     }
     await mkdir(environment.uploadDir, { recursive: true });
     const filename = path.join(environment.uploadDir, `${randomUUID()}.webp`);

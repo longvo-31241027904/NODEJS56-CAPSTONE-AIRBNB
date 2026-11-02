@@ -13,3 +13,6 @@ src/modules-system/prisma/generated
 docs
 scripts
 *.local.sql
+certs
+**/*.pem
+**/*.key

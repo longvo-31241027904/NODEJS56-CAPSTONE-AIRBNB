@@ -48,7 +48,7 @@ Mọi ghi lịch ứng dụng phải đi qua service này. Schema/index không t
 
 ## Upload và source
 
-ImageStorage dùng chung avatar/phòng/vị trí: Multer memory2MiB; giải mã JPEG/PNG/WebP không động<=16triệu pixel, chuyển WebP UUID. Multipart formFile, upload phòng thêm query maPhong, vị trí maViTri. Kiểm tra quyền/record trước lưu; commit DB trước dọn ảnh cũ; lỗi DB dọn file mới, chỉ xóa file app quản lý. UPLOAD_DIR mặc định uploads/avatars, prefix /uploads/avatars/ giữ tương thích. PUBLIC_URL đúng domain; cần persistent volume khi deploy. Upload không đưa Git.
+ImageStorage dùng chung avatar/phòng/vị trí: Multer memory2MiB; giải mã JPEG/PNG/WebP không động<=16triệu pixel, chuyển WebP UUID. Multipart formFile, upload phòng thêm query maPhong, vị trí maViTri. Kiểm tra quyền/record trước lưu; commit DB trước dọn ảnh cũ; lỗi DB dọn file mới, chỉ xóa file app quản lý. UPLOAD_DIR mặc định uploads/avatars, prefix /uploads/avatars/ giữ tương thích. PUBLIC_URL đúng domain. Local upload cần persistent volume; Render Free dùng IMAGE_STORAGE=cloudinary với TLS Aiven và không dùng disk tạm để lưu ảnh. Upload không đưa Git.
 
 common chứa config/guard/filter/interceptor/helper; modules-system/prisma quản lý DB/shutdown; modules-api/users/catalog/stays chứa nghiệp vụ. Kế thừa tổ chức Nest gateway và Multer Express từ source học tập. Không thêm Redis/microservices/ORM khác. Giữ schema/migration gốc, RSA retrieval chỉ bật loopback.
 
@@ -83,3 +83,7 @@ Postman collection và hướng dẫn demo đã có trong docs/. Các bước c�
 - Kịch bản quay/demo: docs/demo.md. Repository: https://github.com/longvo-31241027904/NODEJS56-CAPSTONE-AIRBNB . Chưa có link deploy/YouTube; chỉ bổ sung khi có thật.
 
 Kiểm tra đóng gói thực tế: `npm run check:containers` đạt (sau build hai image local review); migrate CLI/schema engine chạy offline, runtime health/Swagger/DB503 đạt. Chưa triển khai public, chưa thử migration live từ container. Audit production0; audit toàn bộ còn9 cảnh báo trong dev dependencies, không dùng audit fix --force đổi major.
+
+## Deploy Render Free / Aiven / Cloudinary
+
+Xem [docs/deploy-free.md](docs/deploy-free.md) và render.yaml. Đã thử kết nối TLS, migration và bootstrap ADMIN trên database Aiven riêng; chưa xác nhận deploy public/Cloudinary thật. Cấu hình cloud trong .env.cloud.local, credential ADMIN trong .env.cloud-admin.local (đều Git ignore); giữ nguyên .env local. `test:cloud-prep` là kiểm tra mock/config, không thay thế kiểm chứng cloud thật.
