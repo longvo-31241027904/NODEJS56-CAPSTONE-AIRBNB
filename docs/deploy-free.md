@@ -9,9 +9,10 @@ Ngày 2026-11-03: Aiven service Free hiện có đã bật lại, MySQL 8.4.8;
 kết nối CA/TLS nghiêm ngặt thành công. Đã tạo mới database
 `airbnb_capstone_deploy` và tài khoản riêng, không dùng `avnadmin` chạy app.
 Migration CLI và MariaDB adapter đều đã kết nối thật. Bootstrap ADMIN
-đã chạy, chạy lại không tạo thêm hoặc đổi mật khẩu. Chưa xác nhận Render
-public hoặc upload Cloudinary thật; xem báo cáo deploy mới nhất trước khi
-coi môi trường đã sẵn sàng.
+đã chạy, chạy lại không tạo thêm hoặc đổi mật khẩu. NestJS chạy tại máy
+kết nối Aiven thật đã trả200 cho health/database health/ADMIN signin/OpenAPI.
+Cloudinary Free đã kiểm thử thật: upload ảnh test, CDN200, thay ảnh dọn
+asset cũ và lỗi DB dọn asset mới. Chưa xác nhận Render public.
 
 ## Database cloud riêng
 

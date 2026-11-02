@@ -86,4 +86,4 @@ Kiểm tra đóng gói thực tế: `npm run check:containers` đạt (sau build
 
 ## Deploy Render Free / Aiven / Cloudinary
 
-Xem [docs/deploy-free.md](docs/deploy-free.md) và render.yaml. Đã thử kết nối TLS, migration và bootstrap ADMIN trên database Aiven riêng; chưa xác nhận deploy public/Cloudinary thật. Cấu hình cloud trong .env.cloud.local, credential ADMIN trong .env.cloud-admin.local (đều Git ignore); giữ nguyên .env local. `test:cloud-prep` là kiểm tra mock/config, không thay thế kiểm chứng cloud thật.
+Xem [docs/deploy-free.md](docs/deploy-free.md) và render.yaml. Đã thử kết nối TLS, migration và bootstrap ADMIN trên database Aiven riêng; đã kiểm thử Cloudinary Free thật (upload/CDN/replace/rollback); chưa xác nhận deploy public. Cấu hình cloud trong .env.cloud.local, credential ADMIN trong .env.cloud-admin.local (đều Git ignore); giữ nguyên .env local. `test:cloud-prep` là kiểm tra mock/config, không thay thế kiểm chứng cloud thật.
