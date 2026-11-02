@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+src/modules-system/prisma/generated/
+package-lock.json
+docs/airbnb-reference.swagger.json
+.env*
+uploads/

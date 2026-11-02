@@ -1,0 +1,1507 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Airbnb"
+  },
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "DangKy",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ThongTinNguoiDung"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/signin": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "DangNhap",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DangNhapView"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/binh-luan": {
+      "get": {
+        "tags": [
+          "BinhLuan"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "BinhLuan"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/BinhLuanViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/binh-luan/{id}": {
+      "put": {
+        "tags": [
+          "BinhLuan"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/BinhLuanViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "BinhLuan"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/binh-luan/lay-binh-luan-theo-phong/{MaPhong}": {
+      "get": {
+        "tags": [
+          "BinhLuan"
+        ],
+        "operationId": "GetBinhLuanTheoCongViec",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "MaPhong",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/dat-phong": {
+      "get": {
+        "tags": [
+          "DatPhong"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "DatPhong"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DatPhongViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/dat-phong/{id}": {
+      "get": {
+        "tags": [
+          "DatPhong"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "DatPhong"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DatPhongViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DatPhong"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/dat-phong/lay-theo-nguoi-dung/{MaNguoiDung}": {
+      "get": {
+        "tags": [
+          "DatPhong"
+        ],
+        "operationId": "GetDatPhongTheoUser",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "MaNguoiDung",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ThongTinNguoiDung"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users/phan-trang-tim-kiem": {
+      "get": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "GetPaging",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CapNhatNguoiDung"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users/search/{TenNguoiDung}": {
+      "get": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "GetByName",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "TenNguoiDung",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/users/upload-avatar": {
+      "post": {
+        "tags": [
+          "NguoiDung"
+        ],
+        "operationId": "UploadAvatar",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "formFile",
+            "in": "formData",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/phong-thue": {
+      "get": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PhongViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/phong-thue/lay-phong-theo-vi-tri": {
+      "get": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "GetTheoViTri",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "maViTri",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/phong-thue/phan-trang-tim-kiem": {
+      "get": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "GetPaging",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/phong-thue/{id}": {
+      "get": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/PhongViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/phong-thue/upload-hinh-phong": {
+      "post": {
+        "tags": [
+          "Phong"
+        ],
+        "operationId": "UploadAnhPhong",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maPhong",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "formFile",
+            "in": "formData",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/vi-tri": {
+      "get": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "Post",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ViTriViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/vi-tri/phan-trang-tim-kiem": {
+      "get": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "GetPaging",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "pageIndex",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/vi-tri/{id}": {
+      "get": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "Get",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "Put",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/ViTriViewModel"
+            }
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "Delete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/vi-tri/upload-hinh-vitri": {
+      "post": {
+        "tags": [
+          "ViTri"
+        ],
+        "operationId": "UploadAnhViTri",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "maViTri",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "formFile",
+            "in": "formData",
+            "required": false,
+            "type": "file"
+          },
+          {
+            "name": "tokenCybersoft",
+            "in": "header",
+            "description": "Nhập token cybersoft",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ThongTinNguoiDung": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "boolean"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "DangNhapView": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "BinhLuanViewModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "maPhong": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "maNguoiBinhLuan": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "ngayBinhLuan": {
+          "type": "string"
+        },
+        "noiDung": {
+          "type": "string"
+        },
+        "saoBinhLuan": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "DatPhongViewModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "maPhong": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "ngayDen": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "ngayDi": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "soLuongKhach": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "maNguoiDung": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "CapNhatNguoiDung": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string"
+        },
+        "gender": {
+          "type": "boolean"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "PhongViewModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "tenPhong": {
+          "type": "string"
+        },
+        "khach": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "phongNgu": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "giuong": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "phongTam": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "moTa": {
+          "type": "string"
+        },
+        "giaTien": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "mayGiat": {
+          "type": "boolean"
+        },
+        "banLa": {
+          "type": "boolean"
+        },
+        "tivi": {
+          "type": "boolean"
+        },
+        "dieuHoa": {
+          "type": "boolean"
+        },
+        "wifi": {
+          "type": "boolean"
+        },
+        "bep": {
+          "type": "boolean"
+        },
+        "doXe": {
+          "type": "boolean"
+        },
+        "hoBoi": {
+          "type": "boolean"
+        },
+        "banUi": {
+          "type": "boolean"
+        },
+        "maViTri": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "hinhAnh": {
+          "type": "string"
+        }
+      }
+    },
+    "ViTriViewModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "tenViTri": {
+          "type": "string"
+        },
+        "tinhThanh": {
+          "type": "string"
+        },
+        "quocGia": {
+          "type": "string"
+        },
+        "hinhAnh": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

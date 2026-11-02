@@ -1,0 +1,1676 @@
+{
+  "info": {
+    "name": "Airbnb Backend - 36 operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Manual review flow. Configure admin credentials only locally. Never run automatically against development. Cleanup skips IDs not captured from successful creates in this run."
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /api/auth/signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            },
+            "description": "POST /api/auth/signup; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Review {{demoRunId}}\",\n  \"email\": \"signup-{{demoRunId}}@example.test\",\n  \"phone\": \"0901234567\",\n  \"birthday\": \"2000-01-01\",\n  \"gender\": false,\n  \"role\": \"USER\",\n  \"password\": \"{{demoPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 201) { const id=String(pm.response.json().data.id); pm.collectionVariables.set('userId',id); const run=pm.collectionVariables.get('demoRunId'); if(pm.collectionVariables.get('created_userRunId')!==run) pm.collectionVariables.set('created_userIds','[]'); pm.collectionVariables.set('created_userRunId',run); const owned=JSON.parse(pm.collectionVariables.get('created_userIds')||'[]'); owned.push(id); pm.collectionVariables.set('created_userIds',JSON.stringify(owned)); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /api/auth/signin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signin"
+              ]
+            },
+            "description": "POST /api/auth/signin; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 200) { const d=pm.response.json().data; pm.collectionVariables.set('token',d.token); pm.collectionVariables.set('actorId',String(d.user.id)); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "POST /api/users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "POST /api/users; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Review {{demoRunId}}\",\n  \"email\": \"managed-{{demoRunId}}@example.test\",\n  \"phone\": \"0901234567\",\n  \"birthday\": \"2000-01-01\",\n  \"gender\": false,\n  \"role\": \"USER\",\n  \"password\": \"{{demoPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 201) { const id=String(pm.response.json().data.id); pm.collectionVariables.set('userId',id); const run=pm.collectionVariables.get('demoRunId'); if(pm.collectionVariables.get('created_userRunId')!==run) pm.collectionVariables.set('created_userIds','[]'); pm.collectionVariables.set('created_userRunId',run); const owned=JSON.parse(pm.collectionVariables.get('created_userIds')||'[]'); owned.push(id); pm.collectionVariables.set('created_userIds',JSON.stringify(owned)); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "GET /api/users; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/users/phan-trang-tim-kiem",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/phan-trang-tim-kiem?pageIndex=1&pageSize=10&keyword=Review {{demoRunId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "phan-trang-tim-kiem"
+              ],
+              "query": [
+                {
+                  "key": "pageIndex",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "keyword",
+                  "value": "Review {{demoRunId}}"
+                }
+              ]
+            },
+            "description": "GET /api/users/phan-trang-tim-kiem; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/users/{id}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "GET /api/users/{id}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/users/search/{TenNguoiDung}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/search/Review%20{{demoRunId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "search",
+                "Review%20{{demoRunId}}"
+              ]
+            },
+            "description": "GET /api/users/search/{TenNguoiDung}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/users/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "PUT /api/users/{id}; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Review {{demoRunId}}\",\n  \"email\": \"managed-{{demoRunId}}@example.test\",\n  \"phone\": \"0901234567\",\n  \"birthday\": \"2000-01-01\",\n  \"gender\": false,\n  \"role\": \"USER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /api/users/upload-avatar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/upload-avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "upload-avatar"
+              ]
+            },
+            "description": "POST /api/users/upload-avatar; See README for permissions",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "formFile",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select local JPEG/PNG/WebP <=2 MiB before sending"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vị trí",
+      "item": [
+        {
+          "name": "POST /api/vi-tri",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri"
+              ]
+            },
+            "description": "POST /api/vi-tri; ADMIN required",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenViTri\": \"Review {{demoRunId}}\",\n  \"tinhThanh\": \"Da Nang\",\n  \"quocGia\": \"Viet Nam\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 201) { const id=String(pm.response.json().data.id); pm.collectionVariables.set('locationId',id); const run=pm.collectionVariables.get('demoRunId'); if(pm.collectionVariables.get('created_locationRunId')!==run) pm.collectionVariables.set('created_locationIds','[]'); pm.collectionVariables.set('created_locationRunId',run); const owned=JSON.parse(pm.collectionVariables.get('created_locationIds')||'[]'); owned.push(id); pm.collectionVariables.set('created_locationIds',JSON.stringify(owned)); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/vi-tri",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri"
+              ]
+            },
+            "description": "GET /api/vi-tri; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/vi-tri/phan-trang-tim-kiem",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri/phan-trang-tim-kiem?pageIndex=1&pageSize=10&keyword=Review {{demoRunId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri",
+                "phan-trang-tim-kiem"
+              ],
+              "query": [
+                {
+                  "key": "pageIndex",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "keyword",
+                  "value": "Review {{demoRunId}}"
+                }
+              ]
+            },
+            "description": "GET /api/vi-tri/phan-trang-tim-kiem; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/vi-tri/{id}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri/{{locationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri",
+                "{{locationId}}"
+              ]
+            },
+            "description": "GET /api/vi-tri/{id}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/vi-tri/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri/{{locationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri",
+                "{{locationId}}"
+              ]
+            },
+            "description": "PUT /api/vi-tri/{id}; ADMIN required",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenViTri\": \"Review {{demoRunId}}\",\n  \"tinhThanh\": \"Da Nang\",\n  \"quocGia\": \"Viet Nam\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /api/vi-tri/upload-hinh-vitri",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri/upload-hinh-vitri?maViTri={{locationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri",
+                "upload-hinh-vitri"
+              ],
+              "query": [
+                {
+                  "key": "maViTri",
+                  "value": "{{locationId}}"
+                }
+              ]
+            },
+            "description": "POST /api/vi-tri/upload-hinh-vitri; ADMIN required",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "formFile",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select local JPEG/PNG/WebP <=2 MiB before sending"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Phòng",
+      "item": [
+        {
+          "name": "POST /api/phong-thue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue"
+              ]
+            },
+            "description": "POST /api/phong-thue; ADMIN required",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenPhong\": \"Review {{demoRunId}}\",\n  \"khach\": 2,\n  \"phongNgu\": 1,\n  \"giuong\": 1,\n  \"phongTam\": 1,\n  \"moTa\": \"Review demo\",\n  \"giaTien\": 500000,\n  \"maViTri\": {{locationId}},\n  \"mayGiat\": false,\n  \"banLa\": false,\n  \"tivi\": false,\n  \"dieuHoa\": false,\n  \"wifi\": false,\n  \"bep\": false,\n  \"doXe\": false,\n  \"hoBoi\": false,\n  \"banUi\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 201) { const id=String(pm.response.json().data.id); pm.collectionVariables.set('roomId',id); const run=pm.collectionVariables.get('demoRunId'); if(pm.collectionVariables.get('created_roomRunId')!==run) pm.collectionVariables.set('created_roomIds','[]'); pm.collectionVariables.set('created_roomRunId',run); const owned=JSON.parse(pm.collectionVariables.get('created_roomIds')||'[]'); owned.push(id); pm.collectionVariables.set('created_roomIds',JSON.stringify(owned)); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/phong-thue",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue"
+              ]
+            },
+            "description": "GET /api/phong-thue; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/phong-thue/lay-phong-theo-vi-tri",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue/lay-phong-theo-vi-tri?maViTri={{locationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue",
+                "lay-phong-theo-vi-tri"
+              ],
+              "query": [
+                {
+                  "key": "maViTri",
+                  "value": "{{locationId}}"
+                }
+              ]
+            },
+            "description": "GET /api/phong-thue/lay-phong-theo-vi-tri; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/phong-thue/phan-trang-tim-kiem",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue/phan-trang-tim-kiem?pageIndex=1&pageSize=10&keyword=Review {{demoRunId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue",
+                "phan-trang-tim-kiem"
+              ],
+              "query": [
+                {
+                  "key": "pageIndex",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "keyword",
+                  "value": "Review {{demoRunId}}"
+                }
+              ]
+            },
+            "description": "GET /api/phong-thue/phan-trang-tim-kiem; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/phong-thue/{id}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue",
+                "{{roomId}}"
+              ]
+            },
+            "description": "GET /api/phong-thue/{id}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/phong-thue/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue",
+                "{{roomId}}"
+              ]
+            },
+            "description": "PUT /api/phong-thue/{id}; ADMIN required",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenPhong\": \"Review {{demoRunId}}\",\n  \"khach\": 2,\n  \"phongNgu\": 1,\n  \"giuong\": 1,\n  \"phongTam\": 1,\n  \"moTa\": \"Review demo\",\n  \"giaTien\": 500000,\n  \"maViTri\": {{locationId}},\n  \"mayGiat\": false,\n  \"banLa\": false,\n  \"tivi\": false,\n  \"dieuHoa\": false,\n  \"wifi\": false,\n  \"bep\": false,\n  \"doXe\": false,\n  \"hoBoi\": false,\n  \"banUi\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST /api/phong-thue/upload-hinh-phong",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue/upload-hinh-phong?maPhong={{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue",
+                "upload-hinh-phong"
+              ],
+              "query": [
+                {
+                  "key": "maPhong",
+                  "value": "{{roomId}}"
+                }
+              ]
+            },
+            "description": "POST /api/phong-thue/upload-hinh-phong; ADMIN required",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "formFile",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select local JPEG/PNG/WebP <=2 MiB before sending"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Đặt phòng",
+      "item": [
+        {
+          "name": "POST /api/dat-phong",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dat-phong",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dat-phong"
+              ]
+            },
+            "description": "POST /api/dat-phong; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maPhong\": {{roomId}},\n  \"maNguoiDung\": {{actorId}},\n  \"ngayDen\": \"2040-01-10T00:00:00Z\",\n  \"ngayDi\": \"2040-01-12T00:00:00Z\",\n  \"soLuongKhach\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 201) { const id=String(pm.response.json().data.id); pm.collectionVariables.set('bookingId',id); const run=pm.collectionVariables.get('demoRunId'); if(pm.collectionVariables.get('created_bookingRunId')!==run) pm.collectionVariables.set('created_bookingIds','[]'); pm.collectionVariables.set('created_bookingRunId',run); const owned=JSON.parse(pm.collectionVariables.get('created_bookingIds')||'[]'); owned.push(id); pm.collectionVariables.set('created_bookingIds',JSON.stringify(owned)); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/dat-phong",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dat-phong",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dat-phong"
+              ]
+            },
+            "description": "GET /api/dat-phong; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/dat-phong/{id}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dat-phong/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dat-phong",
+                "{{bookingId}}"
+              ]
+            },
+            "description": "GET /api/dat-phong/{id}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/dat-phong/lay-theo-nguoi-dung/{MaNguoiDung}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dat-phong/lay-theo-nguoi-dung/{{actorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dat-phong",
+                "lay-theo-nguoi-dung",
+                "{{actorId}}"
+              ]
+            },
+            "description": "GET /api/dat-phong/lay-theo-nguoi-dung/{MaNguoiDung}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/dat-phong/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dat-phong/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dat-phong",
+                "{{bookingId}}"
+              ]
+            },
+            "description": "PUT /api/dat-phong/{id}; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maPhong\": {{roomId}},\n  \"maNguoiDung\": {{actorId}},\n  \"ngayDen\": \"2040-01-10T00:00:00Z\",\n  \"ngayDi\": \"2040-01-12T00:00:00Z\",\n  \"soLuongKhach\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bình luận",
+      "item": [
+        {
+          "name": "POST /api/binh-luan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/binh-luan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "binh-luan"
+              ]
+            },
+            "description": "POST /api/binh-luan; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maPhong\": {{roomId}},\n  \"maNguoiBinhLuan\": {{actorId}},\n  \"noiDung\": \"Review comment\",\n  \"saoBinhLuan\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }",
+                  "if (pm.response.code === 201) { const id=String(pm.response.json().data.id); pm.collectionVariables.set('commentId',id); const run=pm.collectionVariables.get('demoRunId'); if(pm.collectionVariables.get('created_commentRunId')!==run) pm.collectionVariables.set('created_commentIds','[]'); pm.collectionVariables.set('created_commentRunId',run); const owned=JSON.parse(pm.collectionVariables.get('created_commentIds')||'[]'); owned.push(id); pm.collectionVariables.set('created_commentIds',JSON.stringify(owned)); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/binh-luan",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/binh-luan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "binh-luan"
+              ]
+            },
+            "description": "GET /api/binh-luan; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/binh-luan/lay-binh-luan-theo-phong/{MaPhong}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/binh-luan/lay-binh-luan-theo-phong/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "binh-luan",
+                "lay-binh-luan-theo-phong",
+                "{{roomId}}"
+              ]
+            },
+            "description": "GET /api/binh-luan/lay-binh-luan-theo-phong/{MaPhong}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT /api/binh-luan/{id}",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/binh-luan/{{commentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "binh-luan",
+                "{{commentId}}"
+              ]
+            },
+            "description": "PUT /api/binh-luan/{id}; See README for permissions",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maPhong\": {{roomId}},\n  \"maNguoiBinhLuan\": {{actorId}},\n  \"noiDung\": \"Review comment\",\n  \"saoBinhLuan\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cleanup (chỉ ID tạo trong demo)",
+      "item": [
+        {
+          "name": "DELETE /api/binh-luan/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/binh-luan/{{commentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "binh-luan",
+                "{{commentId}}"
+              ]
+            },
+            "description": "DELETE /api/binh-luan/{id}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id=String(pm.variables.get('commentId')||''); const owned=JSON.parse(pm.collectionVariables.get('created_commentIds')||'[]'); if (pm.collectionVariables.get('created_commentRunId')!==pm.collectionVariables.get('demoRunId') || !id || !owned.includes(id)) { pm.execution.skipRequest(); throw new Error('Blocked: target ID was not created by this demo run'); }"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/dat-phong/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dat-phong/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "dat-phong",
+                "{{bookingId}}"
+              ]
+            },
+            "description": "DELETE /api/dat-phong/{id}; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id=String(pm.variables.get('bookingId')||''); const owned=JSON.parse(pm.collectionVariables.get('created_bookingIds')||'[]'); if (pm.collectionVariables.get('created_bookingRunId')!==pm.collectionVariables.get('demoRunId') || !id || !owned.includes(id)) { pm.execution.skipRequest(); throw new Error('Blocked: target ID was not created by this demo run'); }"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/phong-thue/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/phong-thue/{{roomId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "phong-thue",
+                "{{roomId}}"
+              ]
+            },
+            "description": "DELETE /api/phong-thue/{id}; ADMIN required"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id=String(pm.variables.get('roomId')||''); const owned=JSON.parse(pm.collectionVariables.get('created_roomIds')||'[]'); if (pm.collectionVariables.get('created_roomRunId')!==pm.collectionVariables.get('demoRunId') || !id || !owned.includes(id)) { pm.execution.skipRequest(); throw new Error('Blocked: target ID was not created by this demo run'); }"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/vi-tri/{id}",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/vi-tri/{{locationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vi-tri",
+                "{{locationId}}"
+              ]
+            },
+            "description": "DELETE /api/vi-tri/{id}; ADMIN required"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id=String(pm.variables.get('locationId')||''); const owned=JSON.parse(pm.collectionVariables.get('created_locationIds')||'[]'); if (pm.collectionVariables.get('created_locationRunId')!==pm.collectionVariables.get('demoRunId') || !id || !owned.includes(id)) { pm.execution.skipRequest(); throw new Error('Blocked: target ID was not created by this demo run'); }"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/users",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?id={{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{userId}}"
+                }
+              ]
+            },
+            "description": "DELETE /api/users; See README for permissions"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const id=String(pm.variables.get('userId')||''); const owned=JSON.parse(pm.collectionVariables.get('created_userIds')||'[]'); if (pm.collectionVariables.get('created_userRunId')!==pm.collectionVariables.get('demoRunId') || !id || !owned.includes(id)) { pm.execution.skipRequest(); throw new Error('Blocked: target ID was not created by this demo run'); }"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code < 300) { const body = pm.response.json(); pm.test('Success envelope', () => pm.expect(body.status).to.eql('success')); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "demoRunId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "actorId",
+      "value": ""
+    },
+    {
+      "key": "locationId",
+      "value": ""
+    },
+    {
+      "key": "roomId",
+      "value": ""
+    },
+    {
+      "key": "bookingId",
+      "value": ""
+    },
+    {
+      "key": "commentId",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.collectionVariables.get('demoRunId')) pm.collectionVariables.set('demoRunId', pm.variables.replaceIn('{{$guid}}'));"
+        ]
+      }
+    }
+  ]
+}

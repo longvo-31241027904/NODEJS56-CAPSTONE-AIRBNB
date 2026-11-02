@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+dist
+coverage
+.git
+.env
+.env.*
+uploads
+**/*.log
+**/*.zip
+**/*.pdf
+src/modules-system/prisma/generated
+docs
+scripts
+*.local.sql
