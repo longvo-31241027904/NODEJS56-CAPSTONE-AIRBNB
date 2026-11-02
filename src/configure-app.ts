@@ -6,6 +6,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseSuccessInterceptor } from './common/interceptors/response.interceptor';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import rateLimit from 'express-rate-limit';
+import { signinRateKey } from './common/helpers/signin-rate-key';
 export function configureApp(app: NestExpressApplication) {
   if (environment.trustProxyHops) app.set('trust proxy', environment.trustProxyHops);
   app.use(
@@ -13,6 +14,7 @@ export function configureApp(app: NestExpressApplication) {
     rateLimit({
       windowMs: 10 * 60 * 1000,
       limit: 5,
+      keyGenerator: signinRateKey,
       standardHeaders: 'draft-8',
       legacyHeaders: false,
       handler: (_req, res) =>

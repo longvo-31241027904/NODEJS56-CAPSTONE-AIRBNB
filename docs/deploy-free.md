@@ -12,7 +12,8 @@ Migration CLI và MariaDB adapter đều đã kết nối thật. Bootstrap ADMI
 đã chạy, chạy lại không tạo thêm hoặc đổi mật khẩu. NestJS chạy tại máy
 kết nối Aiven thật đã trả200 cho health/database health/ADMIN signin/OpenAPI.
 Cloudinary Free đã kiểm thử thật: upload ảnh test, CDN200, thay ảnh dọn
-asset cũ và lỗi DB dọn asset mới. Chưa xác nhận Render public.
+asset cũ và lỗi DB dọn asset mới. Render Free đã public tại https://nodejs56-capstone-airbnb.onrender.com,
+health/database/OpenAPI200 và23 kiểm tra HTTPS đầu tiên đạt.
 
 ## Database cloud riêng
 
@@ -77,10 +78,11 @@ Local cũ dùng `IMAGE_STORAGE=local`, không cần Cloudinary.
 5. Sau khi Render cấp hostname HTTPS, đặt PUBLIC_URL đúng origin,
    CORS_ORIGINS là các origin frontend được phép (không `*`). Swagger
    cùng origin hoạt động khi không có frontend. App nghe 0.0.0.0 và PORT.
-6. TRUST_PROXY_HOPS mặc định0; chỉ bật1 khi đã kiểm tra đường proxy thực
-   của service và hành vi rate limit. Không trust proxy=true hoặc tin IP
-   đầu tiên tùy ý từ client. Rate limiter trong RAM, reset khi restart và
-   chưa dùng chung giữa nhiều instance.
+6. Giữ TRUST_PROXY_HOPS=0 trên service này. Rate limiter chỉ khi RENDER=true
+   dùng CF-Connecting-IP do Cloudflare ghi đè tại Render public ingress;
+   header thiếu/không hợp lệ thì fallback socket/IP. Local bỏ qua header này.
+   Không trust proxy=true hoặc dùng entry XFF đầu tiên từ client.
+   Rate limiter trong RAM, reset khi restart, chưa dùng chung nhiều instance.
 7. Healthcheck `/api/health`; kiểm tra riêng `/api/health/database` phải200.
    Swagger `/api/docs`, JSON `/api/docs-json`.
 
@@ -108,3 +110,18 @@ Nguồn chính thức: [Render Free](https://render.com/docs/free),
 [Aiven MySQL Free](https://aiven.io/docs/products/mysql/concepts/mysql-free-tier),
 [Prisma MySQL TLS](https://www.prisma.io/docs/orm/v7/core-concepts/supported-databases/mysql),
 [Cloudinary Node](https://cloudinary.com/documentation/node_image_and_video_upload).
+
+## Kiểm chứng public có journal riêng
+
+`CLOUD_PUBLIC_VERIFY=true node scripts/verify-public.cjs prepare` đọc
+PUBLIC_URL trong .env.cloud.local, tạo fixture riêng và lưu journal ignored
+.env.cloud-verification.local. Nếu journal đã có thì dừng trước ghi.
+Sau khi redeploy thành công, chạy cùng opt-in với mode `after-redeploy`:
+kiểm tra ảnh/DB còn tồn tại rồi cleanup đúng ID và marker, theo thứ tự FK,
+chỉ xóa Cloudinary asset có HMAC hợp lệ của lượt này. Nếu lỗi giữa chừng,
+kiểm tra journal trước; không reset hoặc chạy lại prepare để ghi đè nó.
+
+Rate limit ingress: [Render edge architecture](https://render.com/articles/how-render-handles-ddos-attacks),
+[Cloudflare request headers](https://developers.cloudflare.com/fundamentals/reference/http-headers/).
+Chỉ áp dụng CF-Connecting-IP khi public ingress do Render quản lý; nếu đổi
+host hoặc thêm đường đi trực tiếp thì phải xem lại giả định này.

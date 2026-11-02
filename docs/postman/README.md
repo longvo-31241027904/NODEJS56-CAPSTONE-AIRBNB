@@ -11,3 +11,5 @@ Trước phiên demo mới, xóa collection variables token/IDs/demoRunId/create
 Thử lỗi riêng (không thuộc luồng happy-path): gender="false" hoặc số khách0 →400; bỏ token ở API bảo vệ →401; dùng JWT USER gọi ghi phòng →403; gửi lại POST đặt cùng phòng/cùng lịch →409. Hai đơn [10,12) và [12,14) được phép. Tạo trước khi xem/sửa/xóa, tránh gọi lại POST thành công ngoài ý muốn. Bản mẫu dùng ngày2040 có timezone; nếu đặt trùng ngoài ý muốn hãy đổi khoảng ngày hoặc tạo phòng demo mới.
 
 Kiểm tra file: npm run check:postman. Điều này không chứng minh collection chạy trên server; kiểm thử HTTP/MySQL tự động của project là npm run test:mysql.
+
+Public Render Free: import `airbnb.render.postman_environment.json` với baseUrl đã kiểm chứng HTTPS. Credential/token mẫu để trống; chỉ nhập tại máy. Collection có thao tác tạo/xóa: không chạy toàn bộ collection trên deploy khi chưa xem guards và phạm vi fixture.

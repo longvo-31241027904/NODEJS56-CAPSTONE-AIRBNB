@@ -1,6 +1,6 @@
 # Backend Airbnb — NestJS / Prisma / MySQL
 
-Đã có code và kiểm thử MySQL thật **36/36 thao tác nghiệp vụ**; không tính hai health. Đã có Postman Collection v2.1, environment mẫu và hướng dẫn demo; chưa deploy public hoặc quay video demo. Không yêu cầu tokenCybersoft.
+Đã có code và kiểm thử MySQL thật **36/36 thao tác nghiệp vụ**; không tính hai health. Đã có Postman Collection v2.1, environment mẫu và hướng dẫn demo; đã deploy Render Free; chưa quay video demo. Không yêu cầu tokenCybersoft.
 
 Hướng dẫn từ source sạch: [docs/setup.md](docs/setup.md).
 
@@ -70,7 +70,7 @@ Chi tiết36endpoint: docs/api-scope.md. Swagger UI tham khảo truy cập đư�
 
 ## Chuẩn bị nộp còn lại
 
-Postman collection và hướng dẫn demo đã có trong docs/. Các bước còn lại: rà soát môi trường deploy/TLS/proxy/secret/backup DB và ảnh, quản lý task theo yêu cầu lớp, deploy khi được yêu cầu và quay video YouTube. Đủ36endpoint chưa đồng nghĩa hoàn thành các phần nộp bài này. Chưa deploy public.
+Postman collection và hướng dẫn demo đã có trong docs/. Các bước nộp bài còn lại: quản lý task theo yêu cầu lớp và quay video YouTube. Vận hành cần theo dõi hạn mức Free, backup DB/ảnh và quản lý secret. Đủ36endpoint chưa đồng nghĩa hoàn thành các phần nộp bài này. Swagger public: https://nodejs56-capstone-airbnb.onrender.com/api/docs .
 
 
 ## Bàn giao và các kiểm tra mới
@@ -80,10 +80,12 @@ Postman collection và hướng dẫn demo đã có trong docs/. Các bước c�
 - `npm run format` và `npm run format:check`: Prettier cho source/script/config, bỏ qua generated client/lockfile/snapshot. `npx tsc --noEmit --noUnusedLocals --noUnusedParameters` kiểm tra import/code thừa.
 - `npm run check:postman`: đối chiếu36method/path, JSON và script syntax; chưa chạy collection end-to-end. Collection/Environment trong docs/postman, import và đọc docs/postman/README.md. Không tự chạy trên database phát triển.
 - Dockerfile/.dockerignore và hướng dẫn docs/containers.md: migration target giữ CLI, production non-root, không seed; persistent volume ảnh và hostname container khác Windows. Đã build hai target và chạy container smoke non-root; chưa migrate MySQL thật từ container hoặc kiểm chứng Compose port mapping.
-- Kịch bản quay/demo: docs/demo.md. Repository: https://github.com/longvo-31241027904/NODEJS56-CAPSTONE-AIRBNB . Chưa có link deploy/YouTube; chỉ bổ sung khi có thật.
+- Kịch bản quay/demo: docs/demo.md. Repository: https://github.com/longvo-31241027904/NODEJS56-CAPSTONE-AIRBNB . Swagger public: https://nodejs56-capstone-airbnb.onrender.com/api/docs ; chưa có video YouTube.
 
-Kiểm tra đóng gói thực tế: `npm run check:containers` đạt (sau build hai image local review); migrate CLI/schema engine chạy offline, runtime health/Swagger/DB503 đạt. Chưa triển khai public, chưa thử migration live từ container. Audit production0; audit toàn bộ còn9 cảnh báo trong dev dependencies, không dùng audit fix --force đổi major.
+Kiểm tra đóng gói thực tế: `npm run check:containers` đạt (sau build hai image local review); migrate CLI/schema engine chạy offline, runtime health/Swagger/DB503 đạt. Đã triển khai public bằng native Node Render; chưa thử migration live từ container. Audit production0; audit toàn bộ còn9 cảnh báo trong dev dependencies, không dùng audit fix --force đổi major.
 
 ## Deploy Render Free / Aiven / Cloudinary
 
-Xem [docs/deploy-free.md](docs/deploy-free.md) và render.yaml. Đã thử kết nối TLS, migration và bootstrap ADMIN trên database Aiven riêng; đã kiểm thử Cloudinary Free thật (upload/CDN/replace/rollback); chưa xác nhận deploy public. Cấu hình cloud trong .env.cloud.local, credential ADMIN trong .env.cloud-admin.local (đều Git ignore); giữ nguyên .env local. `test:cloud-prep` là kiểm tra mock/config, không thay thế kiểm chứng cloud thật.
+Xem [docs/deploy-free.md](docs/deploy-free.md) và render.yaml. Đã thử kết nối TLS, migration và bootstrap ADMIN trên database Aiven riêng; đã kiểm thử Cloudinary Free thật (upload/CDN/replace/rollback); Render public đã trả200 health/database/OpenAPI; đã đạt23 kiểm tra HTTPS gồm auth/quyền/booking/comment/upload. Cấu hình cloud trong .env.cloud.local, credential ADMIN trong .env.cloud-admin.local (đều Git ignore); giữ nguyên .env local. `test:cloud-prep` là kiểm tra mock/config, không thay thế kiểm chứng cloud thật.
+
+Public: [Swagger](https://nodejs56-capstone-airbnb.onrender.com/api/docs), [health](https://nodejs56-capstone-airbnb.onrender.com/api/health), [database health](https://nodejs56-capstone-airbnb.onrender.com/api/health/database). Render Free có cold start. ADMIN cloud xem .env.cloud-admin.local tại máy, không dùng credential local seed.
