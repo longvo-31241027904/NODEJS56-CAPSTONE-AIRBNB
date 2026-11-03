@@ -68,10 +68,12 @@ Swagger local: [http://localhost:3069/api/docs](http://localhost:3069/api/docs)
 3. Bấm **Authorize**, dán token nguyên bản, không thêm tiền tố `Bearer`.
 4. Gọi API được bảo vệ theo quyền của tài khoản; đăng ký mới luôn nhận quyền USER.
 
-## Tài liệu
+## Liên kết
 
-- [Cài đặt đầy đủ và khởi tạo dữ liệu local](docs/setup.md)
-- [Postman Collection và hướng dẫn sử dụng](docs/postman/README.md)
-- [Triển khai Render, Aiven và Cloudinary](docs/deploy-free.md)
+- [Source code trên GitHub](https://github.com/longvo-31241027904/NODEJS56-CAPSTONE-AIRBNB)
+- [Postman Collection](docs/postman/airbnb.postman_collection.json)
+- [Postman environment local](docs/postman/airbnb.postman_environment.json)
+- [Postman environment public](docs/postman/airbnb.render.postman_environment.json)
+- [Swagger tham khảo (JSON)](docs/airbnb-reference.swagger.json)
 
 > Render Free có cold start: request đầu tiên sau thời gian không hoạt động có thể phản hồi chậm.
